@@ -1,6 +1,6 @@
-# Flappy Bird
+# Flappy Bird Clone
 
-Flappy Bird Clone
+[Flappy Bird Clone Tutorial](http://www.codevinsky.com/phaser-2-0-tutorial-flappy-bird-part-1/)
 
 ## Pre-requesits
 
