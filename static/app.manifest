@@ -1,7 +1,6 @@
 {
     "name": "Flappy Bird",
     "start_url": "/index.html",
-    "display": "fullscreen",
     "orientation": "portrait",
     "icons": [
         {

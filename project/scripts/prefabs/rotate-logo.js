@@ -1,15 +1,15 @@
 class RotateLogo extends Phaser.Sprite {
 
-    constructor(game, x, y, rotateSpeed) {
-        super(game, x, y, 'logo');
-        this.anchor.setTo(0.5);
+  constructor(game, x, y, rotateSpeed) {
+    super(game, x, y, 'logo');
+    this.anchor.setTo(0.5);
 
-        this.rotateSpeed = rotateSpeed;
-    }
+    this.rotateSpeed = rotateSpeed;
+  }
 
-    update() {
-        this.angle += this.rotateSpeed;
-    }
+  update() {
+    this.angle += this.rotateSpeed;
+  }
 
 }
 
