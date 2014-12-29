@@ -1,0 +1,12 @@
+{
+  "name": "flappy-bird",
+  "version": "0.0.1",
+  "description": "Flappy Bird Clone",
+  "authors": [
+    ""
+  ],
+  "dependencies": {
+    "phaser-official": "latest",
+    "traceur-runtime": "latest"
+  }
+}
