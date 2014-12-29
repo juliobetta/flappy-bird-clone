@@ -1,18 +1,31 @@
-import RotateLogo from 'prefabs/rotate-logo';
-
-var logo;
 class Game {
 
-  create() {
-    logo = new RotateLogo(
-      this.game,
-      this.game.width / 2, this.game.height / 2,
-      0.5
-    );
+  /**
+   * ########################################################################################
+   * State Methods ##########################################################################
+   * ########################################################################################
+  */
 
-    this.add.existing(logo);
+  preload() {
+
   }
 
+
+  create() {
+    // enable physics
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    this.game.physics.arcade.gravity.y = 500;
+
+    // add background
+    this.background = this.game.add.sprite(0, 0, 'background');
+  }
+
+
+  /**
+   * ########################################################################################
+   * Common Methods #########################################################################
+   * ########################################################################################
+  */
 }
 
 export default Game;
