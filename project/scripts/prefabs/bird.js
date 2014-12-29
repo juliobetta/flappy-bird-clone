@@ -14,8 +14,25 @@ class Bird extends Phaser.Sprite {
     this.game.physics.arcade.enableBody(this);
   }
 
-  update() {}
+  update() {
+    // check to see if our angle is less than 90.
+    // if it is, rotate the bird towards the ground by 2.5 degrees
+    if(this.angle < 90) {
+      this.angle += 2.5;
+    }
+  }
 
+
+  /**
+   * Add flap animation properties
+   */
+  flap() {
+    // jump upwards
+    this.body.velocity.y = -400;
+
+    // rotate the bird to -40 degrees
+    this.game.add.tween(this).to({ angle: -40 }, 100).start();
+  }
 }
 
 export default Bird;
