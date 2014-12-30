@@ -30,6 +30,11 @@ class Preload {
       'flappyfont', 'assets/fonts/flappyfont.png', 'assets/fonts/flappyfont.fnt'
     );
 
+    this.load.audio('score',     'assets/score.wav');
+    this.load.audio('flap',      'assets/flap.wav');
+    this.load.audio('pipeHit',   'assets/pipe-hit.wav');
+    this.load.audio('groundHit', 'assets/ground-hit.wav');
+
     this.load.spritesheet('bird', 'assets/bird.png', 34, 24, 3);
     this.load.spritesheet('pipe', 'assets/pipes.png', 54, 320, 2);
   }

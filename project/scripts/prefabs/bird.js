@@ -3,6 +3,9 @@ class Bird extends Phaser.Sprite {
   constructor(game, x, y) {
     super(game, x, y, 'bird');
 
+    this.alive     = false;
+    this.flapSound = this.game.add.audio('flap');
+
     // set the sprite's anchor to the center
     this.anchor.setTo(0.5, 0.5);
 
@@ -10,7 +13,6 @@ class Bird extends Phaser.Sprite {
     this.animations.add('flap');
     this.animations.play('flap', 12, true);
 
-    this.alive = false;
 
     // add physics and disable gravity until the game is started
     this.game.physics.arcade.enableBody(this);
@@ -30,6 +32,8 @@ class Bird extends Phaser.Sprite {
    * Add flap animation properties
    */
   flap() {
+    this.flapSound.play();
+
     // jump upwards
     this.body.velocity.y = -400;
 

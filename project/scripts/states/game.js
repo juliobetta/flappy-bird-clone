@@ -1,6 +1,7 @@
 import Bird      from 'prefabs/bird';
 import Ground    from 'prefabs/ground';
 import PipeGroup from 'prefabs/pipe-group';
+import Pipe      from 'prefabs/pipe';
 
 class Game {
 
@@ -9,10 +10,6 @@ class Game {
    * State Methods ##########################################################################
    * ########################################################################################
   */
-
-  preload() {
-  }
-
 
   create() {
 
@@ -41,6 +38,10 @@ class Game {
     );
     this.scoreText.visible = false;
 
+    // sounds!
+    this.scoreSound     = this.game.add.audio('score');
+    this.pipeHitSound   = this.game.add.audio('pipeHit');
+    this.groundHitSound = this.game.add.audio('groundHit');
 
     this.createInstructions();
     this.addBirdControls();
@@ -143,6 +144,7 @@ class Game {
       pipeGroup.hasScored = true;
       this.score++;
       this.scoreText.setText(this.score.toString());
+      this.scoreSound.play();
     }
   }
 
@@ -150,7 +152,12 @@ class Game {
   /**
    * On bird die collider handler
    */
-  handleBirdDeath() {
+  handleBirdDeath(bird, object) {
+    if(object !== undefined) {
+      if      (object instanceof Pipe)   { this.pipeHitSound.play();   }
+      else if (object instanceof Ground) { this.groundHitSound.play(); }
+    }
+
     this.game.state.start('gameover');
   }
 
