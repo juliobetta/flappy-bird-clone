@@ -23,40 +23,28 @@ class Game {
     // add background
     this.background = this.game.add.sprite(0, 0, 'background');
 
-    // create a new Bird object ...
+    // Da Bird!
     this.bird = new Bird(this.game, 100, this.game.height/2);
-    // ... and add it to the game
     this.game.add.existing(this.bird);
 
-
     this.pipes = this.game.add.group();
-
 
     // add ground to the game
     this.ground = new Ground(this.game, 0, 400, 335, 112);
     this.game.add.existing(this.ground);
 
-    // add a timer
-    this.pipeGenerator = this.game.time.events.loop(
-      /* delay    = */ Phaser.Timer.SECOND * 1.25, // call every 1.25 seconds
-      /* callback = */ this.generatePipes,
-      /* context  = */ this
-    );
-    this.pipeGenerator.timer.start();
 
+    this.createInstructions();
     this.addBirdControls();
   }
 
 
   update() {
-    this.game.physics.arcade.collide(this.bird, this.ground, this.onBirdDie, null, this);
-    this.pipes.forEach(function(pipeGroup) {
-      this.game.physics.arcade.collide(this.bird, pipeGroup, this.onBirdDie, null, this);
-    }, this);
+    this.game.physics.arcade.collide(this.bird, this.ground, this.handleBirdDeath, null, this);
 
-    if(!this.bird.alive) {
-      this.onBirdDie();
-    }
+    this.pipes.forEach(function(pipeGroup) {
+      this.game.physics.arcade.collide(this.bird, pipeGroup, this.handleBirdDeath, null, this);
+    }, this);
   }
 
 
@@ -67,18 +55,51 @@ class Game {
   */
 
   /**
+   * Start the game
+   */
+  startGame() {
+    this.bird.body.allowGravity = true;
+    this.bird.alive = true;
+
+    // add pipe timer
+    this.pipeGenerator = this.game.time.events.loop(
+      /* delay    = */ Phaser.Timer.SECOND * 1.25, // call every 1.25 seconds
+      /* callback = */ this.generatePipes,
+      /* context  = */ this
+    );
+    this.pipeGenerator.timer.start();
+
+    this.instructionsGroup.destroy();
+  }
+
+
+  /**
+   * Create game instructions
+   */
+  createInstructions() {
+    this.instructionsGroup = this.game.add.group();
+    this.instructionsGroup.add(this.game.add.sprite(this.game.width/2, 100, 'getReady'));
+    this.instructionsGroup.add(this.game.add.sprite(this.game.width/2, 325, 'instructions'));
+    this.instructionsGroup.setAll('anchor.x', 0.5);
+    this.instructionsGroup.setAll('anchor.y', 0.5);
+  }
+
+
+  /**
    * Add bird controls
    */
   addBirdControls() {
-    // keep spacebar from propagating up to the browser
-    this.game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
-
     // add keyboard controls
-    var flapKey = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    flapKey.onDown.add(this.bird.flap, this.bird);
+    this.flapKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.flapKey.onDown.addOnce(this.startGame, this);
+    this.flapKey.onDown.add(this.bird.flap, this.bird);
 
     // add mouse/touch controls
-    this.input.onDown.add(this.bird.flap, this.bird);
+    this.game.input.onDown.addOnce(this.startGame, this);
+    this.game.input.onDown.add(this.bird.flap, this.bird);
+
+    // keep spacebar from propagating up to the browser
+    this.game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
   }
 
 
@@ -100,7 +121,7 @@ class Game {
   /**
    * On bird die collider handler
    */
-  onBirdDie() {
+  handleBirdDeath() {
     this.game.state.start('gameover');
   }
 
