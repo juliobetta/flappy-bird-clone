@@ -11,11 +11,13 @@ class Game {
   */
 
   preload() {
-
   }
 
 
   create() {
+
+    this.score = 0;
+
     // enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.physics.arcade.gravity.y = 1200;
@@ -33,6 +35,12 @@ class Game {
     this.ground = new Ground(this.game, 0, 400, 335, 112);
     this.game.add.existing(this.ground);
 
+    // add score text
+    this.scoreText = this.game.add.bitmapText(
+      this.game.width/2, 10, 'flappyfont', this.score.toString(), 24
+    );
+    this.scoreText.visible = false;
+
 
     this.createInstructions();
     this.addBirdControls();
@@ -40,9 +48,13 @@ class Game {
 
 
   update() {
+    // enable collision between the bird and the ground
     this.game.physics.arcade.collide(this.bird, this.ground, this.handleBirdDeath, null, this);
 
     this.pipes.forEach(function(pipeGroup) {
+      this.checkScore(pipeGroup);
+
+      // enable collision between the bird and the pipes
       this.game.physics.arcade.collide(this.bird, pipeGroup, this.handleBirdDeath, null, this);
     }, this);
   }
@@ -60,6 +72,7 @@ class Game {
   startGame() {
     this.bird.body.allowGravity = true;
     this.bird.alive = true;
+    this.scoreText.visible = true;
 
     // add pipe timer
     this.pipeGenerator = this.game.time.events.loop(
@@ -115,6 +128,22 @@ class Game {
     }
 
     pipeGroup.reset(this.game.width + pipeGroup.width/2, pipeY);
+  }
+
+
+  /**
+   * Check if bird passed through the pipes to increase its score
+   * @param  {Array} pipeGroup
+   */
+  checkScore(pipeGroup) {
+    if(pipeGroup.exists &&
+      !pipeGroup.hasScored &&
+      pipeGroup.topPipe.world.x <= this.bird.world.x
+    ) {
+      pipeGroup.hasScored = true;
+      this.score++;
+      this.scoreText.setText(this.score.toString());
+    }
   }
 
 
