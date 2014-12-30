@@ -20,6 +20,8 @@ class Bird extends Phaser.Sprite {
     if(this.angle < 90) {
       this.angle += 2.5;
     }
+
+    if(this.y > this.game.height) this.kill();
   }
 
 

@@ -12,7 +12,7 @@ class Ground extends Phaser.TileSprite {
         // we don't want the ground's body to be affected by gravity
         this.body.allowGravity = false;
 
-        // make the ground ot not react on collisions
+        // make the ground to not react on collisions
         this.body.immovable = true;
     }
 
