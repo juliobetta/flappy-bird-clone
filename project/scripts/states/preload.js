@@ -37,9 +37,9 @@ class Preload {
 
     // sounds
     this.load.audio('score',     'assets/piu.wav');
-    this.load.audio('flap',      'assets/flap.wav');
-    this.load.audio('pipeHit',   'assets/pipe-hit.wav');
-    this.load.audio('groundHit', 'assets/ground-hit.wav');
+    this.load.audio('flap',      'assets/boing.wav');
+    this.load.audio('pipeHit',   'assets/pff.wav');
+    this.load.audio('groundHit', 'assets/kaploft.wav');
 
     // sprite sheets
     this.load.spritesheet('bird',   'assets/bird.png', 34, 24, 3);
