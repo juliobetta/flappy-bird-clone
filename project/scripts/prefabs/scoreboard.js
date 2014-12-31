@@ -1,3 +1,5 @@
+import StartButton from 'prefabs/start-button';
+
 var SILVER = 0,
     GOLDEN = 1;
 
@@ -21,22 +23,11 @@ class Scoreboard extends Phaser.Group {
     this.add(this.bestScoreText);
 
     // add a button with a callback
-    this.startButton =  this.game.add.button(
-      this.game.width / 2, 300, 'startButton', this.onClickStart, this
-    );
-    this.startButton.anchor.setTo(0.5, 0.5);
+    this.startButton = new StartButton(this.game);
     this.add(this.startButton);
 
     this.y = this.game.height;
     this.x = 0;
-  }
-
-
-  /**
-   * On click start button
-   */
-  onClickStart() {
-    this.game.state.start('game');
   }
 
 

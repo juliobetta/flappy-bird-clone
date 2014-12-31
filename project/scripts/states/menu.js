@@ -1,3 +1,6 @@
+import Ground      from 'prefabs/ground';
+import StartButton from 'prefabs/start-button';
+
 class Menu {
 
   /**
@@ -17,7 +20,10 @@ class Menu {
       /* key = */ 'background'
     );
 
-    this.createGround();
+    // add ground to the game
+    this.ground = new Ground(this.game, 0, 400, 335, 112);
+    this.game.add.existing(this.ground);
+
     this.createTitle();
     this.createStartButton();
   }
@@ -32,25 +38,6 @@ class Menu {
    * Common Methods #########################################################################
    * ########################################################################################
   */
-
-  /**
-   * Create the background's moving ground
-   */
-  createGround() {
-    // add the ground sprite as a title and start scrolling in the negative x direction
-    this.ground = this.game.add.tileSprite(
-      /* x      = */ 0,
-      /* y      = */ 400,
-      /* width  = */ 335,
-      /* height = */ 112,
-      /* key    = */ 'ground'
-    );
-
-    this.ground.autoScroll(
-      /* xSpeed = */ -200,
-      /* ySpeed = */ 0
-    );
-  }
 
 
   /**
@@ -100,22 +87,8 @@ class Menu {
    * Create a start button
    */
   createStartButton() {
-    this.startButton = this.game.add.button(
-      /* x               = */ this.game.width/2,
-      /* y               = */ 300,
-      /* key             = */ 'startButton',
-      /* callback        = */ this.onClickStart,
-      /* callbackContext = */ this
-    );
-    this.startButton.anchor.setTo(0.5, 0.5);
-  }
-
-
-  /**
-   * Start button click handler to actually start the game
-   */
-  onClickStart() {
-    this.game.state.start('game');
+    this.startButton = new StartButton(this.game);
+    this.game.add.existing(this.startButton);
   }
 }
 
