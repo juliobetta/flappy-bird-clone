@@ -4,6 +4,7 @@ class Bird extends Phaser.Sprite {
     super(game, x, y, 'bird');
 
     this.alive     = false;
+    this.onGround  = false;
     this.flapSound = this.game.add.audio('flap');
 
     // set the sprite's anchor to the center
@@ -39,7 +40,7 @@ class Bird extends Phaser.Sprite {
    * Add flap animation properties
    */
   flap() {
-    if(!!this.alive) {
+    if(!!this.alive && !this.onGround) {
       this.flapSound.play();
 
       // jump upwards

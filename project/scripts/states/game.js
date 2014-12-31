@@ -80,7 +80,7 @@ class Game {
    * Start the game
    */
   startGame() {
-    if(this.gameover && this.bird.alive) { return; }
+    if(this.gameover || this.bird.alive) { return; }
 
     this.bird.body.allowGravity = true;
     this.bird.alive = true;
