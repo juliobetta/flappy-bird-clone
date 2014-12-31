@@ -1,7 +1,8 @@
-import Bird      from 'prefabs/bird';
-import Ground    from 'prefabs/ground';
-import PipeGroup from 'prefabs/pipe-group';
-import Pipe      from 'prefabs/pipe';
+import Bird       from 'prefabs/bird';
+import Ground     from 'prefabs/ground';
+import PipeGroup  from 'prefabs/pipe-group';
+import Pipe       from 'prefabs/pipe';
+import Scoreboard from 'prefabs/scoreboard';
 
 class Game {
 
@@ -12,8 +13,8 @@ class Game {
   */
 
   create() {
-
-    this.score = 0;
+    this.score    = 0;
+    this.gameover = false;
 
     // enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -22,15 +23,17 @@ class Game {
     // add background
     this.background = this.game.add.sprite(0, 0, 'background');
 
+    this.pipes = this.game.add.group();
+
     // Da Bird!
     this.bird = new Bird(this.game, 100, this.game.height/2);
     this.game.add.existing(this.bird);
 
-    this.pipes = this.game.add.group();
-
     // add ground to the game
     this.ground = new Ground(this.game, 0, 400, 335, 112);
     this.game.add.existing(this.ground);
+
+    this.addBirdControls();
 
     // add score text
     this.scoreText = this.game.add.bitmapText(
@@ -44,7 +47,6 @@ class Game {
     this.groundHitSound = this.game.add.audio('groundHit');
 
     this.createInstructions();
-    this.addBirdControls();
   }
 
 
@@ -52,14 +54,21 @@ class Game {
     // enable collision between the bird and the ground
     this.game.physics.arcade.collide(this.bird, this.ground, this.handleBirdDeath, null, this);
 
-    this.pipes.forEach(function(pipeGroup) {
-      this.checkScore(pipeGroup);
+    if(!this.gameover) {
+      this.pipes.forEach(function(pipeGroup) {
+        this.checkScore(pipeGroup);
 
-      // enable collision between the bird and the pipes
-      this.game.physics.arcade.collide(this.bird, pipeGroup, this.handleBirdDeath, null, this);
-    }, this);
+        // enable collision between the bird and the pipes
+        this.game.physics.arcade.collide(this.bird, pipeGroup, this.handleBirdDeath, null, this);
+      }, this);
+    }
   }
 
+
+  render() {
+    // this.game.debug.body(this.ground);
+    // this.game.debug.body(this.bird);
+  }
 
   /**
    * ########################################################################################
@@ -71,6 +80,8 @@ class Game {
    * Start the game
    */
   startGame() {
+    if(this.gameover && this.bird.alive) { return; }
+
     this.bird.body.allowGravity = true;
     this.bird.alive = true;
     this.scoreText.visible = true;
@@ -151,14 +162,27 @@ class Game {
 
   /**
    * On bird die collider handler
+   * @param {Object} bird
+   * @param {Object} object
    */
   handleBirdDeath(bird, object) {
-    if(object !== undefined) {
-      if      (object instanceof Pipe)   { this.pipeHitSound.play();   }
-      else if (object instanceof Ground) { this.groundHitSound.play(); }
+    if (object instanceof Pipe) {
+      this.pipeHitSound.play();
+    } else if (object instanceof Ground && !this.bird.onGround) {
+      this.groundHitSound.play();
+      this.scoreboard = new Scoreboard(this.game);
+      this.game.add.existing(this.scoreboard);
+      this.scoreboard.show(this.score);
+      this.bird.onGround = true;
     }
 
-    this.game.state.start('gameover');
+    if(this.gameover) { return; }
+
+    this.gameover = true;
+    this.bird.kill();
+    this.pipes.callAll('stop');
+    this.pipeGenerator.timer.stop();
+    this.ground.stopScroll();
   }
 
 
@@ -169,6 +193,7 @@ class Game {
     this.game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
     this.bird.destroy();
     this.pipes.destroy();
+    this.scoreboard.destroy();
   }
 }
 

@@ -4,7 +4,7 @@ class Ground extends Phaser.TileSprite {
         super(game, x, y, width, height, 'ground');
 
         // start scrolling our ground
-        this.autoScroll(-200, 0);
+        this.autoScroll(-200.0, 0.0);
 
         // enable physics to the ground, so that it can detect collision
         this.game.physics.arcade.enableBody(this);

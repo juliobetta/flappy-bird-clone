@@ -52,6 +52,14 @@ class PipeGroup extends Phaser.Group {
     }
   }
 
+
+  /**
+   * Stop pipes from moving
+   */
+  stop() {
+    this.setAll('body.velocity.x', 0);
+  }
+
 }
 
 export default PipeGroup;

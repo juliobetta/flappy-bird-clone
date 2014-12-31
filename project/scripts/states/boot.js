@@ -7,6 +7,7 @@ class Boot {
   create() {
     // max number of fingers to detect
     this.input.maxPointers = 1;
+    this.game.state.start('preload', true, false);
 
     // auto pause if window looses focus
     this.stage.disableVisibilityChange = true;
@@ -15,10 +16,8 @@ class Boot {
       this.stage.scale.pageAlignHorizontally = true;
     }
 
-    // this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    // this.game.scale.setScreenSize(true);
-
-    this.game.state.start('preload', true, false);
+    this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    this.game.scale.setScreenSize(true);
   }
 
 }
